@@ -13,21 +13,24 @@ def calculator():
 
 @app.route('/calc.py', methods=['POST'])
 def calculator_post():
-    error = ''
+    error = ''    
     number_one = request.form['first-number']
     if number_one.isdigit():
         number_one = float(number_one)
     else:
-        error = 'First number is not a digit'
+        error = 'First operand is not a digit'
         return render_template('index.html', result='', error=error)
+
     number_two = request.form['second-number']
     if number_two.isdigit():
         number_two = float(number_two)
     else:
-        error = 'Second number is not a digit'
+        error = 'Second operand is not a digit'
         return render_template('index.html', result='', error=error)
+
     operator = request.form['operation']
-    if operator not in ['+', '-', '/', '*']:
+    operations = ['+', '-', '/', '*']
+    if operator not in operations:
         error = 'Invalid operation'
         return render_template('index.html', result='', error=error)
 
@@ -51,12 +54,8 @@ def calculator_post():
         return a - b
 
 
-    actions = {
-        '+': add,
-        '*': multiply,
-        '/': divide,
-        '-': substract
-        }
+    functions = [add, multiply, divide, substract]
+    actions = dict(zip(operations, functions))
 
 
     result = actions[operator](number_one, number_two)
